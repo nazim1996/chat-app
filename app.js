@@ -3,10 +3,14 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
+const bodyParser = require("body-parser")
+var cors = require('cors');
+
 const cookieParser = require('cookie-parser');
 const loginRouter = require("./router/loginRouter");
 const usersRouter = require("./router/usersRouter");
 const inboxRouter = require("./router/inboxRouter");
+
 
 // internal imports
 const { notFoundHandler, errorHandler } = require('./middlewares/common/errorHandler');
@@ -21,6 +25,13 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
 .then(() => console.log('connection successful')) 
 .catch(err => console.log(err.message));
 
+/**Request Parser */
+// app.use(express.json());
+// app.use(express.urlencoded({extended: true}));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // router setup
 app.use("/", loginRouter);
 app.use("/users", usersRouter);
@@ -31,10 +42,6 @@ app.use(notFoundHandler);
 
 // common error handler
 app.use(errorHandler);
-
-/**Request Parser */
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 // Set view engine
 app.set("view engine", "ejs");
