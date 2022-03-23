@@ -38,7 +38,6 @@ const addUserValidationHandler = (req, res, next) =>{
     if(Object.keys(mappedErrors).length === 0){
         next();
     } else{
-        // response the error
         res.status(400).json({
             errors: mappedErrors,
         });
